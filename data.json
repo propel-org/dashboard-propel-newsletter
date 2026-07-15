@@ -1,0 +1,9 @@
+[
+  {"Month number": "1", "Month": "Enero", "Sent date": "2026-01-06", "Audience number": "10853", "Open rate %": "18.26", "Click rate %": "2.81"},
+  {"Month number": "2", "Month": "Febrero", "Sent date": "2026-02-03", "Audience number": "10860", "Open rate %": "18.96", "Click rate %": "3.55"},
+  {"Month number": "3", "Month": "Marzo", "Sent date": "2026-03-03", "Audience number": "10817", "Open rate %": "15.65", "Click rate %": "2.23"},
+  {"Month number": "4", "Month": "Abril", "Sent date": "2026-04-07", "Audience number": "10973", "Open rate %": "16.88", "Click rate %": "2.29"},
+  {"Month number": "5", "Month": "Mayo", "Sent date": "2026-05-05", "Audience number": "10923", "Open rate %": "12.84", "Click rate %": "2.89"},
+  {"Month number": "6", "Month": "Junio", "Sent date": "2026-06-02", "Audience number": "11149", "Open rate %": "16.37", "Click rate %": "1.51"},
+  {"Month number": "7", "Month": "Julio", "Sent date": "2026-07-07", "Audience number": "11340", "Open rate %": "14.50", "Click rate %": "1.70"}
+]

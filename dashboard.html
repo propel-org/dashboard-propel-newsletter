@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propel Newsletter Dashboard Q3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Libre Franklin', serif; 
+            background-color: #f8f8f8; 
+            color: #333;
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(90deg, #16625b 0%, #16625b 30%, #1e7a6f 100%);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .banner-logo {
+            width: 80px;
+            height: 80px;
+            background-color: #eb9f4f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .banner-logo svg { width: 100%; height: 100%; }
+        
+        .banner-text h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        .banner-text p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Meta Progress */
+        .meta-container {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .meta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .meta-header h3 {
+            font-size: 1.3rem;
+            color: #16625b;
+            font-weight: 600;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        .meta-stats {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .meta-stat {
+            text-align: center;
+        }
+
+        .meta-stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #eb9f4f;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        .meta-stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #16625b, #eb9f4f);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        /* Scorecards */
+        .scorecards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .scorecard {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #eb9f4f;
+        }
+
+        .scorecard h3 {
+            font-size: 0.95rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        .scorecard-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #16625b;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        /* Charts */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .chart-container h3 {
+            font-size: 1.1rem;
+            color: #16625b;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .bars-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            grid-column: 1 / -1;
+        }
+
+        .bars-container h3 {
+            font-size: 1.1rem;
+            color: #16625b;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        .bars-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .loading, .error {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            background: white;
+            border-radius: 8px;
+            margin: 2rem;
+            font-size: 1.1rem;
+            font-family: 'Libre Franklin', serif;
+        }
+
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+        }
+
+        @media (max-width: 768px) {
+            .banner { flex-direction: column; text-align: center; }
+            .banner-text h1 { font-size: 1.5rem; }
+            .charts-section { grid-template-columns: 1fr; }
+            .scorecards { grid-template-columns: 1fr; }
+            .meta-stats { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <div class="banner-logo">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <rect fill="#eb9f4f" width="100" height="100"/>
+                <polygon points="0,100 100,0 100,100" fill="white"/>
+            </svg>
+        </div>
+        <div class="banner-text">
+            <h1>Propel Newsletter Q3</h1>
+            <p>Seguimiento de newsletters | Mailchimp</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="loadingState" class="loading">Cargando datos...</div>
+        <div id="errorState" style="display:none;" class="error"></div>
+
+        <div id="metaContainer" style="display:none;" class="meta-container">
+            <div class="meta-header">
+                <h3>Meta Q3 2026: 22,000 Suscriptores</h3>
+                <div class="meta-stats">
+                    <div class="meta-stat">
+                        <div class="meta-stat-number" id="metaCurrent">0</div>
+                        <div class="meta-stat-label">Actual</div>
+                    </div>
+                    <div class="meta-stat">
+                        <div class="meta-stat-number" id="metaProgress">0%</div>
+                        <div class="meta-stat-label">Progreso</div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-label"><span>0</span><span>22,000</span></div>
+        </div>
+
+        <div id="scorecards" style="display:none;" class="scorecards">
+            <div class="scorecard">
+                <h3>Última Audiencia</h3>
+                <div class="scorecard-value" id="scoreAudience">0</div>
+            </div>
+            <div class="scorecard">
+                <h3>Open Rate Promedio</h3>
+                <div class="scorecard-value" id="scoreOpenRate">0%</div>
+            </div>
+            <div class="scorecard">
+                <h3>Click Rate Promedio</h3>
+                <div class="scorecard-value" id="scoreClickRate">0%</div>
+            </div>
+        </div>
+
+        <div id="chartsSection" style="display:none;" class="charts-section">
+            <div class="chart-container">
+                <h3>Open Rate % por Mes</h3>
+                <div class="chart-wrapper"><canvas id="openRateChart"></canvas></div>
+            </div>
+            <div class="chart-container">
+                <h3>Click Rate % por Mes</h3>
+                <div class="chart-wrapper"><canvas id="clickRateChart"></canvas></div>
+            </div>
+        </div>
+
+        <div id="barsContainer" style="display:none;" class="bars-container">
+            <h3>Audiencia por Mes</h3>
+            <div class="bars-wrapper"><canvas id="audienceChart"></canvas></div>
+        </div>
+    </div>
+
+    <script>
+        const META_TARGET = 22000;
+        const COLORS = { primary: '#16625b', accent: '#eb9f4f' };
+
+        function showLoading(show = true) {
+            document.getElementById('loadingState').style.display = show ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorState').textContent = message;
+            showLoading(false);
+        }
+
+        function showContent() {
+            showLoading(false);
+            document.getElementById('metaContainer').style.display = 'block';
+            document.getElementById('scorecards').style.display = 'grid';
+            document.getElementById('chartsSection').style.display = 'grid';
+            document.getElementById('barsContainer').style.display = 'block';
+        }
+
+        async function loadData() {
+            try {
+                const response = await fetch('data.json?v=' + Date.now());
+                if (!response.ok) throw new Error('No se encontró data.json');
+                const newsletters = await response.json();
+                
+                if (!Array.isArray(newsletters) || newsletters.length === 0) {
+                    showError('No hay datos en data.json');
+                    return;
+                }
+                
+                processData(newsletters);
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al cargar datos. Asegúrate de que existe data.json en el mismo directorio.');
+            }
+        }
+
+        function processData(newsletters) {
+            try {
+                const lastNewsletter = newsletters[newsletters.length - 1];
+                const lastAudience = parseInt(lastNewsletter['Audience number']) || 0;
+                const metaPercent = Math.min(100, Math.round((lastAudience / META_TARGET) * 100));
+
+                document.getElementById('metaCurrent').textContent = lastAudience.toLocaleString();
+                document.getElementById('metaProgress').textContent = metaPercent + '%';
+                document.getElementById('progressFill').style.width = metaPercent + '%';
+                document.getElementById('scoreAudience').textContent = lastAudience.toLocaleString();
+
+                let totalOpenWeighted = 0, totalClickWeighted = 0, totalAudience = 0;
+                newsletters.forEach(row => {
+                    const audience = parseInt(row['Audience number']) || 0;
+                    const openRate = parseFloat(row['Open rate %']) || 0;
+                    const clickRate = parseFloat(row['Click rate %']) || 0;
+                    totalOpenWeighted += openRate * audience;
+                    totalClickWeighted += clickRate * audience;
+                    totalAudience += audience;
+                });
+
+                const avgOpenRate = totalAudience > 0 ? (totalOpenWeighted / totalAudience).toFixed(2) : 0;
+                const avgClickRate = totalAudience > 0 ? (totalClickWeighted / totalAudience).toFixed(2) : 0;
+                
+                document.getElementById('scoreOpenRate').textContent = avgOpenRate + '%';
+                document.getElementById('scoreClickRate').textContent = avgClickRate + '%';
+
+                const monthlyData = {};
+                newsletters.forEach(row => {
+                    const month = row['Month'];
+                    if (!monthlyData[month]) {
+                        monthlyData[month] = { openRates: [], clickRates: [], audiences: [] };
+                    }
+                    monthlyData[month].openRates.push(parseFloat(row['Open rate %']) || 0);
+                    monthlyData[month].clickRates.push(parseFloat(row['Click rate %']) || 0);
+                    monthlyData[month].audiences.push(parseInt(row['Audience number']) || 0);
+                });
+
+                const months = Object.keys(monthlyData);
+                const openAvgs = months.map(m => (monthlyData[m].openRates.reduce((a,b)=>a+b,0)/monthlyData[m].openRates.length).toFixed(2));
+                const clickAvgs = months.map(m => (monthlyData[m].clickRates.reduce((a,b)=>a+b,0)/monthlyData[m].clickRates.length).toFixed(2));
+                const audiences = months.map(m => monthlyData[m].audiences.reduce((a,b)=>a+b,0));
+
+                new Chart(document.getElementById('openRateChart'), {
+                    type: 'line',
+                    data: { labels: months, datasets: [{ label: 'Open Rate %', data: openAvgs, borderColor: COLORS.primary, backgroundColor: 'rgba(22,98,91,0.1)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: COLORS.accent, pointRadius: 5 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                });
+
+                new Chart(document.getElementById('clickRateChart'), {
+                    type: 'line',
+                    data: { labels: months, datasets: [{ label: 'Click Rate %', data: clickAvgs, borderColor: COLORS.accent, backgroundColor: 'rgba(235,159,79,0.1)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: COLORS.primary, pointRadius: 5 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                });
+
+                new Chart(document.getElementById('audienceChart'), {
+                    type: 'bar',
+                    data: { labels: months, datasets: [{ label: 'Audiencia', data: audiences, backgroundColor: COLORS.primary, borderRadius: 4 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                });
+
+                showContent();
+            } catch (error) {
+                console.error('Error processing:', error);
+                showError('Error al procesar datos: ' + error.message);
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
