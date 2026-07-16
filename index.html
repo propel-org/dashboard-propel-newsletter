@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Propel Newsletter Dashboard Q3</title>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Franklin:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,37 +16,31 @@
         }
 
         /* Banner */
-        .banner {
+        banner {
             background: linear-gradient(90deg, #16625b 0%, #16625b 30%, #1e7a6f 100%);
             color: white;
-            padding: 2rem;
             display: flex;
-            align-items: center;
-            gap: 2rem;
+            align-items: stretch;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .banner-logo {
-            width: 70px;
-            height: 70px;
-            background-color: #eb9f4f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            border-radius: 4px;
             overflow: hidden;
         }
 
-        .banner-logo svg { width: 100%; height: 100%; }
-        
         .banner-content {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex: 1;
             gap: 3rem;
+            padding: 2rem;
         }
+
+        .banner-logo-right {
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            flex-shrink: 0;
+        }
+
+        .banner-logo-right svg { width: 100%; height: 100%; display: block; }
 
         .banner-text h1 {
             font-size: 2rem;
@@ -61,32 +55,56 @@
 
         .banner-meta {
             display: flex;
-            align-items: center;
-            gap: 1.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
             min-width: 300px;
+        }
+
+        .banner-meta-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.85;
+        }
+
+        .banner-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
         }
 
         .progress-bar {
             flex: 1;
             height: 10px;
-            background-color: #e0e0e0;
+            background-color: rgba(255,255,255,0.25);
             border-radius: 5px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            background-color: #16625b;
+            background-color: #eb9f4f;
             width: 0%;
             transition: width 0.3s ease;
         }
 
+        .progress-value-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+
         .progress-value {
+            font-family: 'DM Mono', monospace;
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 500;
             color: #eb9f4f;
-            min-width: 60px;
-            text-align: right;
+        }
+
+        .progress-caption {
+            font-size: 0.8rem;
+            opacity: 0.85;
         }
 
         /* Container */
@@ -113,7 +131,7 @@
 
         .scorecard h3 {
             font-size: 0.95rem;
-            color: #666;
+            color: #16625b;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 1rem;
@@ -121,8 +139,9 @@
         }
 
         .scorecard-value {
+            font-family: 'DM Mono', monospace;
             font-size: 2.5rem;
-            font-weight: 700;
+            font-weight: 500;
             color: #16625b;
         }
 
@@ -199,24 +218,28 @@
     </style>
 </head>
 <body>
-    <div class="banner">
-        <div class="banner-logo">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <rect fill="#eb9f4f" width="100" height="100"/>
-                <polygon points="0,100 100,0 100,100" fill="white"/>
-            </svg>
-        </div>
+     <div class="banner">
         <div class="banner-content">
             <div class="banner-text">
                 <h1>Propel Newsletter Q3</h1>
                 <p>Seguimiento de newsletters | Mailchimp</p>
             </div>
             <div class="banner-meta">
-                <div style="flex: 1;">
+                <div class="banner-meta-title">Status progreso</div>
+                <div class="banner-meta-row">
                     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                    <div class="progress-value-wrap">
+                        <span class="progress-value" id="metaProgress">0%</span>
+                        <span class="progress-caption">Avance</span>
+                    </div>
                 </div>
-                <div class="progress-value" id="metaProgress">0%</div>
             </div>
+        </div>
+        <div class="banner-logo-right">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <rect fill="#ff5c26" width="100" height="100"/>
+                <polygon points="76,22 1,100 18,100" fill="white"/>
+            </svg>
         </div>
     </div>
 
@@ -240,12 +263,12 @@
         </div>
 
         <div id="chartsSection" style="display:none;" class="charts-section">
-            <div class="chart-container">
-                <h3>Open Rate Promedio</h3>
+          <div class="chart-container">
+                <h3>Open Rate %</h3>
                 <div class="chart-wrapper"><canvas id="openRateChart"></canvas></div>
             </div>
             <div class="chart-container">
-                <h3>Click Rate Promedio</h3>
+                <h3>Click Rate %</h3>
                 <div class="chart-wrapper"><canvas id="clickRateChart"></canvas></div>
             </div>
         </div>
@@ -431,7 +454,17 @@
                             }
                         }
                     },
-                    scales: { y: { beginAtZero: true } }
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#aaaaaa', font: { family: "'Libre Franklin', sans-serif" } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f0f0f0', drawBorder: false },
+                            ticks: { color: '#aaaaaa', font: { family: "'DM Mono', monospace" }, maxTicksLimit: 5 }
+                        }
+                    }
                 }
             });
         }
@@ -473,7 +506,17 @@
                             }
                         }
                     },
-                    scales: { y: { beginAtZero: true } }
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#aaaaaa', font: { family: "'Libre Franklin', sans-serif" } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f0f0f0', drawBorder: false },
+                            ticks: { color: '#aaaaaa', font: { family: "'DM Mono', monospace" }, maxTicksLimit: 5 }
+                        }
+                    }
                 }
             });
         }
@@ -496,7 +539,17 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#aaaaaa', font: { family: "'Libre Franklin', sans-serif" } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f0f0f0', drawBorder: false },
+                            ticks: { color: '#aaaaaa', font: { family: "'DM Mono', monospace" }, maxTicksLimit: 5 }
+                        }
+                    }
                 }
             });
         }
