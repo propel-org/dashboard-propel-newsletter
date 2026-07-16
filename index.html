@@ -10,7 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            font-family: 'Libre Franklin', serif; 
+            font-family: 'Libre Franklin', sans-serif; 
             background-color: #f8f8f8; 
             color: #333;
         }
@@ -27,8 +27,8 @@
         }
 
         .banner-logo {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background-color: #eb9f4f;
             display: flex;
             align-items: center;
@@ -40,17 +40,53 @@
 
         .banner-logo svg { width: 100%; height: 100%; }
         
+        .banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1;
+            gap: 3rem;
+        }
+
         .banner-text h1 {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 0.25rem;
-            font-family: 'Libre Franklin', serif;
         }
 
         .banner-text p {
             font-size: 0.95rem;
             opacity: 0.95;
-            font-family: 'Libre Franklin', serif;
+        }
+
+        .banner-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            min-width: 300px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #16625b;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #eb9f4f;
+            min-width: 60px;
+            text-align: right;
         }
 
         /* Container */
@@ -58,79 +94,6 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
-        }
-
-        /* Meta Progress */
-        .meta-container {
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .meta-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .meta-header h3 {
-            font-size: 1.3rem;
-            color: #16625b;
-            font-weight: 600;
-            font-family: 'Libre Franklin', serif;
-        }
-
-        .meta-stats {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .meta-stat {
-            text-align: center;
-        }
-
-        .meta-stat-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #eb9f4f;
-            font-family: 'Libre Franklin', serif;
-        }
-
-        .meta-stat-label {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.25rem;
-            font-family: 'Libre Franklin', serif;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background-color: #e0e0e0;
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 0.75rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #16625b, #eb9f4f);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-label {
-            font-size: 0.9rem;
-            color: #666;
-            display: flex;
-            justify-content: space-between;
-            font-family: 'Libre Franklin', serif;
         }
 
         /* Scorecards */
@@ -146,7 +109,6 @@
             border-radius: 8px;
             padding: 2rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border-left: 4px solid #eb9f4f;
         }
 
         .scorecard h3 {
@@ -156,14 +118,12 @@
             letter-spacing: 0.05em;
             margin-bottom: 1rem;
             font-weight: 600;
-            font-family: 'Libre Franklin', serif;
         }
 
         .scorecard-value {
             font-size: 2.5rem;
             font-weight: 700;
             color: #16625b;
-            font-family: 'Libre Franklin', serif;
         }
 
         /* Charts */
@@ -186,12 +146,11 @@
             color: #16625b;
             margin-bottom: 1.5rem;
             font-weight: 600;
-            font-family: 'Libre Franklin', serif;
         }
 
         .chart-wrapper {
             position: relative;
-            height: 300px;
+            height: 280px;
         }
 
         .bars-container {
@@ -199,7 +158,7 @@
             border-radius: 8px;
             padding: 1.5rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            grid-column: 1 / -1;
+            grid-column: 1/-1;
         }
 
         .bars-container h3 {
@@ -207,12 +166,11 @@
             color: #16625b;
             margin-bottom: 1.5rem;
             font-weight: 600;
-            font-family: 'Libre Franklin', serif;
         }
 
         .bars-wrapper {
             position: relative;
-            height: 300px;
+            height: 220px;
         }
 
         .loading, .error {
@@ -223,7 +181,6 @@
             border-radius: 8px;
             margin: 2rem;
             font-size: 1.1rem;
-            font-family: 'Libre Franklin', serif;
         }
 
         .error {
@@ -233,10 +190,11 @@
 
         @media (max-width: 768px) {
             .banner { flex-direction: column; text-align: center; }
+            .banner-content { flex-direction: column; }
             .banner-text h1 { font-size: 1.5rem; }
             .charts-section { grid-template-columns: 1fr; }
             .scorecards { grid-template-columns: 1fr; }
-            .meta-stats { flex-direction: column; gap: 1rem; }
+            .banner-meta { min-width: auto; flex-direction: column; }
         }
     </style>
 </head>
@@ -248,9 +206,17 @@
                 <polygon points="0,100 100,0 100,100" fill="white"/>
             </svg>
         </div>
-        <div class="banner-text">
-            <h1>Propel Newsletter Q3</h1>
-            <p>Seguimiento de newsletters | Mailchimp</p>
+        <div class="banner-content">
+            <div class="banner-text">
+                <h1>Propel Newsletter Q3</h1>
+                <p>Seguimiento de newsletters | Mailchimp</p>
+            </div>
+            <div class="banner-meta">
+                <div style="flex: 1;">
+                    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                </div>
+                <div class="progress-value" id="metaProgress">0%</div>
+            </div>
         </div>
     </div>
 
@@ -258,27 +224,9 @@
         <div id="loadingState" class="loading">Cargando datos...</div>
         <div id="errorState" style="display:none;" class="error"></div>
 
-        <div id="metaContainer" style="display:none;" class="meta-container">
-            <div class="meta-header">
-                <h3>Meta Q3 2026: 22,000 Suscriptores</h3>
-                <div class="meta-stats">
-                    <div class="meta-stat">
-                        <div class="meta-stat-number" id="metaCurrent">0</div>
-                        <div class="meta-stat-label">Actual</div>
-                    </div>
-                    <div class="meta-stat">
-                        <div class="meta-stat-number" id="metaProgress">0%</div>
-                        <div class="meta-stat-label">Progreso</div>
-                    </div>
-                </div>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-            <div class="progress-label"><span>0</span><span>22,000</span></div>
-        </div>
-
         <div id="scorecards" style="display:none;" class="scorecards">
             <div class="scorecard">
-                <h3>Última Audiencia</h3>
+                <h3>Audiencia</h3>
                 <div class="scorecard-value" id="scoreAudience">0</div>
             </div>
             <div class="scorecard">
@@ -293,23 +241,23 @@
 
         <div id="chartsSection" style="display:none;" class="charts-section">
             <div class="chart-container">
-                <h3>Open Rate % por Mes</h3>
+                <h3>Open Rate Promedio</h3>
                 <div class="chart-wrapper"><canvas id="openRateChart"></canvas></div>
             </div>
             <div class="chart-container">
-                <h3>Click Rate % por Mes</h3>
+                <h3>Click Rate Promedio</h3>
                 <div class="chart-wrapper"><canvas id="clickRateChart"></canvas></div>
             </div>
         </div>
 
         <div id="barsContainer" style="display:none;" class="bars-container">
-            <h3>Audiencia por Mes</h3>
+            <h3>Unsubscribers por Mes</h3>
             <div class="bars-wrapper"><canvas id="audienceChart"></canvas></div>
         </div>
     </div>
 
     <script>
-        const META_TARGET = 22000;
+        const META_TARGET = 20000;
         const COLORS = { primary: '#16625b', accent: '#eb9f4f' };
 
         function showLoading(show = true) {
@@ -324,7 +272,6 @@
 
         function showContent() {
             showLoading(false);
-            document.getElementById('metaContainer').style.display = 'block';
             document.getElementById('scorecards').style.display = 'grid';
             document.getElementById('chartsSection').style.display = 'grid';
             document.getElementById('barsContainer').style.display = 'block';
@@ -332,29 +279,63 @@
 
         async function loadData() {
             try {
-                const response = await fetch('data.json?v=' + Date.now());
-                if (!response.ok) throw new Error('No se encontró data.json');
-                const newsletters = await response.json();
+                const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQKwdKOQ1CBERoGDKKGKCg4ZqesjkRno9CsPkaSIV7CtAIOP0a-CX7n1SPGKYMHcGicJSEGoD_7jvcg/pub?output=csv');
+                if (!response.ok) throw new Error('Error cargando datos');
+                const csv = await response.text();
+                const data = parseCSV(csv);
                 
-                if (!Array.isArray(newsletters) || newsletters.length === 0) {
-                    showError('No hay datos en data.json');
+                if (data.length === 0) {
+                    showError('No se encontraron datos en el Sheet.');
                     return;
                 }
                 
-                processData(newsletters);
+                processData(data);
             } catch (error) {
                 console.error('Error:', error);
-                showError('Error al cargar datos. Asegúrate de que existe data.json en el mismo directorio.');
+                showError('Error al cargar los datos. Recarga la página.');
             }
         }
 
-        function processData(newsletters) {
+        function parseCSV(csv) {
+            const lines = csv.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                
+                const obj = {};
+                const values = lines[i].split(',');
+                
+                headers.forEach((header, index) => {
+                    obj[header] = values[index] ? values[index].trim() : '';
+                });
+                
+                data.push(obj);
+            }
+
+            return data;
+        }
+
+        function processData(data) {
             try {
+                const newsletters = data.filter(row => 
+                    row['Sent date'] && 
+                    row['Sent date'].includes('2026') && 
+                    row['Month number'] && 
+                    row['Audience number'] &&
+                    parseInt(row['Audience number']) > 0
+                ).sort((a, b) => new Date(a['Sent date']) - new Date(b['Sent date']));
+
+                if (newsletters.length === 0) {
+                    showError('No se encontraron newsletters de 2026 con datos válidos.');
+                    return;
+                }
+
                 const lastNewsletter = newsletters[newsletters.length - 1];
                 const lastAudience = parseInt(lastNewsletter['Audience number']) || 0;
                 const metaPercent = Math.min(100, Math.round((lastAudience / META_TARGET) * 100));
 
-                document.getElementById('metaCurrent').textContent = lastAudience.toLocaleString();
                 document.getElementById('metaProgress').textContent = metaPercent + '%';
                 document.getElementById('progressFill').style.width = metaPercent + '%';
                 document.getElementById('scoreAudience').textContent = lastAudience.toLocaleString();
@@ -379,41 +360,141 @@
                 newsletters.forEach(row => {
                     const month = row['Month'];
                     if (!monthlyData[month]) {
-                        monthlyData[month] = { openRates: [], clickRates: [], audiences: [] };
+                        monthlyData[month] = { 
+                            openRates: [], 
+                            clickRates: [], 
+                            unsubscribers: [],
+                            subjects: [],
+                            previews: [],
+                            archiveUrls: []
+                        };
                     }
                     monthlyData[month].openRates.push(parseFloat(row['Open rate %']) || 0);
                     monthlyData[month].clickRates.push(parseFloat(row['Click rate %']) || 0);
-                    monthlyData[month].audiences.push(parseInt(row['Audience number']) || 0);
+                    monthlyData[month].unsubscribers.push(parseInt(row['Unsubscribers']) || 0);
+                    monthlyData[month].subjects.push(row['Subject line'] || 'N/A');
+                    monthlyData[month].previews.push(row['Preview text'] || 'N/A');
                 });
 
                 const months = Object.keys(monthlyData);
                 const openAvgs = months.map(m => (monthlyData[m].openRates.reduce((a,b)=>a+b,0)/monthlyData[m].openRates.length).toFixed(2));
                 const clickAvgs = months.map(m => (monthlyData[m].clickRates.reduce((a,b)=>a+b,0)/monthlyData[m].clickRates.length).toFixed(2));
-                const audiences = months.map(m => monthlyData[m].audiences.reduce((a,b)=>a+b,0));
+                const unsubsums = months.map(m => monthlyData[m].unsubscribers.reduce((a,b)=>a+b,0));
 
-                new Chart(document.getElementById('openRateChart'), {
-                    type: 'line',
-                    data: { labels: months, datasets: [{ label: 'Open Rate %', data: openAvgs, borderColor: COLORS.primary, backgroundColor: 'rgba(22,98,91,0.1)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: COLORS.accent, pointRadius: 5 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-                });
-
-                new Chart(document.getElementById('clickRateChart'), {
-                    type: 'line',
-                    data: { labels: months, datasets: [{ label: 'Click Rate %', data: clickAvgs, borderColor: COLORS.accent, backgroundColor: 'rgba(235,159,79,0.1)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: COLORS.primary, pointRadius: 5 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-                });
-
-                new Chart(document.getElementById('audienceChart'), {
-                    type: 'bar',
-                    data: { labels: months, datasets: [{ label: 'Audiencia', data: audiences, backgroundColor: COLORS.primary, borderRadius: 4 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-                });
+                createOpenRateChart(months, openAvgs, monthlyData);
+                createClickRateChart(months, clickAvgs, monthlyData);
+                createUnsubscribersChart(months, unsubsums);
 
                 showContent();
             } catch (error) {
                 console.error('Error processing:', error);
-                showError('Error al procesar datos: ' + error.message);
+                showError('Error al procesar los datos: ' + error.message);
             }
+        }
+
+        function createOpenRateChart(months, data, monthlyData) {
+            const ctx = document.getElementById('openRateChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Open Rate %',
+                        data: data,
+                        borderColor: COLORS.primary,
+                        backgroundColor: 'rgba(22,98,91,0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: COLORS.primary,
+                        pointBorderColor: COLORS.primary,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const monthIdx = context.dataIndex;
+                                    const month = months[monthIdx];
+                                    const subject = monthlyData[month].subjects[0] || 'N/A';
+                                    const preview = monthlyData[month].previews[0] || 'N/A';
+                                    return '\nSubject: ' + subject + '\nPreview: ' + preview.substring(0, 50);
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function createClickRateChart(months, data, monthlyData) {
+            const ctx = document.getElementById('clickRateChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Click Rate %',
+                        data: data,
+                        borderColor: COLORS.accent,
+                        backgroundColor: 'rgba(235,159,79,0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: COLORS.accent,
+                        pointBorderColor: COLORS.accent,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    return '\n[Ver en Mailchimp]';
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function createUnsubscribersChart(months, data) {
+            const ctx = document.getElementById('audienceChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Unsubscribers',
+                        data: data,
+                        backgroundColor: COLORS.accent,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
         }
 
         loadData();
