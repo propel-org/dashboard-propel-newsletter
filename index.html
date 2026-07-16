@@ -16,13 +16,14 @@
         }
 
         /* Banner */
-        banner {
+        .banner {
             background: linear-gradient(90deg, #16625b 0%, #16625b 30%, #1e7a6f 100%);
             color: white;
             display: flex;
-            align-items: stretch;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow: hidden;
         }
 
         .banner-content {
@@ -31,21 +32,29 @@
             justify-content: space-between;
             flex: 1;
             gap: 3rem;
-            padding: 2rem;
         }
 
-        .banner-logo-right {
-            height: 100%;
-            aspect-ratio: 1 / 1;
+        .banner-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .banner-logo-icon {
+            width: 42px;
+            height: 42px;
             flex-shrink: 0;
+            border-radius: 4px;
+            overflow: hidden;
         }
 
-        .banner-logo-right svg { width: 100%; height: 100%; display: block; }
+        .banner-logo-icon svg { width: 100%; height: 100%; display: block; }
 
         .banner-text h1 {
             font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0;
         }
 
         .banner-text p {
@@ -97,13 +106,13 @@
 
         .progress-value {
             font-family: 'DM Mono', monospace;
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: 500;
             color: #eb9f4f;
         }
 
         .progress-caption {
-            font-size: 0.8rem;
+            font-size: 1.1rem;
             opacity: 0.85;
         }
 
@@ -191,7 +200,35 @@
             position: relative;
             height: 150px;
         }
+.chartjs-custom-tooltip {
+            position: absolute;
+            background: #2b2b2b;
+            color: white;
+            border-radius: 6px;
+            padding: 0.85rem 1.1rem;
+            font-family: 'Libre Franklin', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            pointer-events: auto;
+            transform: translate(-50%, calc(-100% - 14px));
+            transition: opacity 0.15s ease;
+            opacity: 0;
+            z-index: 20;
+            max-width: 340px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
 
+        .chartjs-custom-tooltip strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            text-transform: capitalize;
+        }
+
+        .chartjs-custom-tooltip a {
+            color: #ffb37a;
+            text-decoration: underline;
+            font-weight: 500;
+        }
         .loading, .error {
             text-align: center;
             padding: 3rem;
@@ -221,7 +258,15 @@
      <div class="banner">
         <div class="banner-content">
             <div class="banner-text">
-                <h1>Propel Newsletter Q3</h1>
+                <div class="banner-title-row">
+                    <div class="banner-logo-icon">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect fill="#ff5c26" width="100" height="100"/>
+                            <polygon points="76,22 1,100 18,100" fill="white"/>
+                        </svg>
+                    </div>
+                    <h1>Propel Newsletter Q3</h1>
+                </div>
                 <p>Seguimiento de newsletters | Mailchimp</p>
             </div>
             <div class="banner-meta">
@@ -235,6 +280,7 @@
                 </div>
             </div>
         </div>
+    </div>
         <div class="banner-logo-right">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <rect fill="#ff5c26" width="100" height="100"/>
@@ -415,7 +461,41 @@
                 showError('Error al procesar los datos: ' + error.message);
             }
         }
+let tooltipHideTimer = null;
 
+        function getOrCreateTooltip(chart) {
+            let tooltipEl = chart.canvas.parentNode.querySelector('div.chartjs-custom-tooltip');
+            if (!tooltipEl) {
+                tooltipEl = document.createElement('div');
+                tooltipEl.className = 'chartjs-custom-tooltip';
+                chart.canvas.parentNode.appendChild(tooltipEl);
+            }
+            return tooltipEl;
+        }
+
+        function externalTooltipHandler(context, buildContent) {
+            const { chart, tooltip } = context;
+            const tooltipEl = getOrCreateTooltip(chart);
+
+            if (tooltip.opacity === 0) {
+                clearTimeout(tooltipHideTimer);
+                tooltipHideTimer = setTimeout(() => {
+                    tooltipEl.style.opacity = 0;
+                }, 500);
+                return;
+            }
+            clearTimeout(tooltipHideTimer);
+
+            if (tooltip.dataPoints && tooltip.dataPoints.length) {
+                tooltipEl.innerHTML = buildContent(tooltip.dataPoints[0]);
+            }
+
+            const { offsetLeft: posX, offsetTop: posY } = chart.canvas;
+            tooltipEl.style.opacity = 1;
+            tooltipEl.style.left = posX + tooltip.caretX + 'px';
+            tooltipEl.style.top = posY + tooltip.caretY + 'px';
+        }
+        
         function createOpenRateChart(months, data, monthlyData) {
             const ctx = document.getElementById('openRateChart').getContext('2d');
             
@@ -443,14 +523,17 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            callbacks: {
-                                afterLabel: function(context) {
-                                    const monthIdx = context.dataIndex;
-                                    const month = months[monthIdx];
+                            enabled: false,
+                            external: function(context) {
+                                externalTooltipHandler(context, function(dataPoint) {
+                                    const month = months[dataPoint.dataIndex];
                                     const subject = monthlyData[month].subjects[0] || 'N/A';
                                     const preview = monthlyData[month].previews[0] || 'N/A';
-                                    return '\nSubject: ' + subject + '\nPreview: ' + preview.substring(0, 50);
-                                }
+                                    return '<strong>' + month + '</strong>' +
+                                        'Open rate: ' + dataPoint.formattedValue + '%<br><br>' +
+                                        'Subject: ' + subject + '<br>' +
+                                        'Preview: ' + preview;
+                                });
                             }
                         }
                     },
@@ -496,13 +579,18 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            callbacks: {
-                                afterLabel: function(context) {
-                                    const monthIdx = context.dataIndex;
-                                    const month = months[monthIdx];
+                            enabled: false,
+                            external: function(context) {
+                                externalTooltipHandler(context, function(dataPoint) {
+                                    const month = months[dataPoint.dataIndex];
                                     const url = monthlyData[month].archiveUrls[0];
-                                    return url ? '\nVer campaña: ' + url : '\nVer campaña: no disponible';
-                                }
+                                    const link = url
+                                        ? '<a href="' + url + '" target="_blank" rel="noopener">Ver campaña</a>'
+                                        : 'Ver campaña: no disponible';
+                                    return '<strong>' + month + '</strong>' +
+                                        'Click rate: ' + dataPoint.formattedValue + '%<br><br>' +
+                                        link;
+                                });
                             }
                         }
                     },
