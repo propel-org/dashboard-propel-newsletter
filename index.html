@@ -170,7 +170,7 @@
 
         .bars-wrapper {
             position: relative;
-            height: 220px;
+            height: 150px;
         }
 
         .loading, .error {
@@ -374,6 +374,7 @@
                     monthlyData[month].unsubscribers.push(parseInt(row['Unsubscribers']) || 0);
                     monthlyData[month].subjects.push(row['Subject line'] || 'N/A');
                     monthlyData[month].previews.push(row['Preview text'] || 'N/A');
+                    monthlyData[month].archiveUrls.push(row['Archive url'] || '');
                 });
 
                 const months = Object.keys(monthlyData);
@@ -464,7 +465,10 @@
                         tooltip: {
                             callbacks: {
                                 afterLabel: function(context) {
-                                    return '\n[Ver en Mailchimp]';
+                                    const monthIdx = context.dataIndex;
+                                    const month = months[monthIdx];
+                                    const url = monthlyData[month].archiveUrls[0];
+                                    return url ? '\nVer campaña: ' + url : '\nVer campaña: no disponible';
                                 }
                             }
                         }
